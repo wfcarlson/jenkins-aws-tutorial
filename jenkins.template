@@ -1,0 +1,244 @@
+AWSTemplateFormatVersion: 2010-09-09
+Metadata:
+  'AWS::CloudFormation::Designer':
+    97985cd6-49f6-478c-bee7-cba10af95adb:
+      size:
+        width: 60
+        height: 60
+      position:
+        x: 760
+        'y': 130
+      z: 0
+      embeds: []
+      isassociatedwith:
+        - eb4ab8c5-13aa-462e-bbf2-bbe3c12a210c
+        - 26dfb23e-9d28-4ea3-8b62-7701150bb238
+      iscontainedinside:
+        - 204d5695-12c0-4425-9a92-af4930757ac7
+    6753423a-9fb5-478e-a94d-bccb4d6d4769:
+      size:
+        width: 190
+        height: 180
+      position:
+        x: 300
+        'y': 130
+      z: 0
+      embeds: []
+    204d5695-12c0-4425-9a92-af4930757ac7:
+      size:
+        width: 140
+        height: 140
+      position:
+        x: 380
+        'y': 160
+      z: 0
+      embeds: []
+      iscontainedinside:
+        - 6753423a-9fb5-478e-a94d-bccb4d6d4769
+    779a16e3-b85f-4df5-91c9-e08defcd2068:
+      source:
+        id: 204d5695-12c0-4425-9a92-af4930757ac7
+        selector: 'g:nth-child(1) g:nth-child(5) g:nth-child(3) circle:nth-child(1)     '
+        port: 'AWS::ContainedInsideLink-AWS::EC2::VPC-VpcId'
+      target:
+        id: 6753423a-9fb5-478e-a94d-bccb4d6d4769
+      z: 12
+    b7624217-7eb7-4687-9832-c68c53b4de2c:
+      source:
+        id: 204d5695-12c0-4425-9a92-af4930757ac7
+        selector: 'g:nth-child(1) g:nth-child(5) g:nth-child(3) circle:nth-child(1)     '
+        port: 'AWS::ContainedInsideLink-AWS::EC2::VPC-VpcId'
+      target:
+        id: 6753423a-9fb5-478e-a94d-bccb4d6d4769
+      z: 12
+    f2382640-b7f8-40cc-aabb-8bbbd8db6827:
+      source:
+        id: 204d5695-12c0-4425-9a92-af4930757ac7
+      target:
+        id: 6753423a-9fb5-478e-a94d-bccb4d6d4769
+      z: 1
+    5e143528-626f-49e0-b2f3-6cdaff0523db:
+      source:
+        id: 97985cd6-49f6-478c-bee7-cba10af95adb
+      target:
+        id: 204d5695-12c0-4425-9a92-af4930757ac7
+      z: 2
+    eb4ab8c5-13aa-462e-bbf2-bbe3c12a210c:
+      size:
+        width: 60
+        height: 60
+      position:
+        x: 911.9280354571677
+        'y': 149.3827253257032
+      z: 0
+      isassociatedwith:
+        - 26dfb23e-9d28-4ea3-8b62-7701150bb238
+      iscontainedinside:
+        - 204d5695-12c0-4425-9a92-af4930757ac7
+    1f203ba8-234d-4e20-bbfa-a176e6a7b58a:
+      source:
+        id: eb4ab8c5-13aa-462e-bbf2-bbe3c12a210c
+      target:
+        id: 204d5695-12c0-4425-9a92-af4930757ac7
+      z: 3
+    27c796f3-fea5-4184-9e8c-fe76b25a8904:
+      source:
+        id: 97985cd6-49f6-478c-bee7-cba10af95adb
+      target:
+        id: eb4ab8c5-13aa-462e-bbf2-bbe3c12a210c
+      z: 4
+    26dfb23e-9d28-4ea3-8b62-7701150bb238:
+      size:
+        width: 60
+        height: 60
+      position:
+        x: 841.6127211981835
+        'y': 49.38688355778107
+      z: 0
+    50eaad54-6fcd-42a2-a8b6-5f4932f009eb:
+      source:
+        id: 97985cd6-49f6-478c-bee7-cba10af95adb
+      target:
+        id: 26dfb23e-9d28-4ea3-8b62-7701150bb238
+      z: 5
+    a0e8b246-5ae2-4116-b5af-4e42e26b8438:
+      source:
+        id: eb4ab8c5-13aa-462e-bbf2-bbe3c12a210c
+      target:
+        id: 26dfb23e-9d28-4ea3-8b62-7701150bb238
+      z: 6
+Parameters:
+  KeyName:
+    Description : "Name of an existing EC2 KeyPair to enable SSH access to the instance"
+    Type: "AWS::EC2::KeyPair::KeyName"
+    ConstraintDescription : "must be the name of an existing EC2 KeyPair."
+
+Mappings: 
+  RegionMap:
+    us-east-1: 
+      AMI: ami-7f418316
+    us-west-1: 
+      AMI: ami-951945d0
+    us-west-2:
+      AMI: ami-16fd7026
+    eu-west-1:
+      AMI: ami-24506250
+    sa-east-1:
+      AMI: ami-3e3be423
+    ap-southeast-1:
+      AMI: ami-74dda626
+    ap-southeast-2:
+      AMI: ami-b3990e89
+    ap-northeast-1:
+      AMI: ami-dcfa4edd 
+
+Resources:
+
+  JenkinsInternetGateway:
+    Type: AWS::EC2::InternetGateway
+    Properties: {}
+
+  InternetGatewayAttachment:
+    Type: AWS::EC2::VPCGatewayAttachment
+    Properties:
+      InternetGatewayId: !Ref JenkinsInternetGateway
+      VpcId: !Ref TestJenkinsVPC
+
+  TestEc2Instance: 
+    Type: AWS::EC2::Instance
+    Properties: 
+      ImageId: ami-0ff8a91507f77f867
+#        Fn::FindInMap:
+#          - "RegionMap"
+#          - Ref: "AWS::Region"
+#          - "AMI"
+      KeyName: 
+        Ref: KeyName
+      NetworkInterfaces: 
+        - AssociatePublicIpAddress: "true"
+          DeviceIndex: "0"
+          GroupSet: 
+            - Ref: "SSHSecurityGroup"
+          SubnetId: 
+            Ref: "TestJenkinsSubnet"
+      UserData:
+        Fn::Base64:
+          !Sub |
+            #!/bin/bash
+            yum update -y
+            yum install -y docker
+
+            #run docker, add user to docker group
+            service docker start
+            usermod -a -G docker ec2-user
+
+            #run jenkins image
+            docker run -u root --rm -d -p 8080:8080 -p 50000:50000 -v jenkins-data:/var/jenkins_home -v /var/run/docker.sock:/var/run/docker.sock jenkinsci/blueocean
+
+            #forward traffic from port 80 to port 8080
+            iptables -A INPUT -i eth0 -p tcp --dport 80 -j ACCEPT
+            iptables -A INPUT -i eth0 -p tcp --dport 8080 -j ACCEPT
+            iptables -A PREROUTING -t nat -i eth0 -p tcp --dport 80 -j REDIRECT --to-port 8080
+      Tags:
+        -
+          Key: Name
+          Value: "Jenkins EC2 instance"
+
+  TestJenkinsVPC:
+    Type: 'AWS::EC2::VPC'
+    Properties:
+      CidrBlock: 10.0.0.0/16
+    Metadata:
+      'AWS::CloudFormation::Designer':
+        id: 6753423a-9fb5-478e-a94d-bccb4d6d4769
+
+  TestJenkinsSubnet:
+    Type: 'AWS::EC2::Subnet'
+    Properties:
+      CidrBlock: 10.0.0.0/16
+      VpcId: !Ref TestJenkinsVPC
+      MapPublicIpOnLaunch: true
+    Metadata:
+      'AWS::CloudFormation::Designer':
+        id: 204d5695-12c0-4425-9a92-af4930757ac7
+    
+  SSHSecurityGroup:
+    Type: 'AWS::EC2::SecurityGroup'
+    Properties:
+      GroupName: test-group
+      GroupDescription: "Enable SSH access via port 22"
+      SecurityGroupIngress: 
+        - 
+          IpProtocol: "tcp"
+          FromPort: 22
+          ToPort: 22
+          CidrIp: "0.0.0.0/0"
+        -
+          IpProtocol: "tcp"
+          FromPort: 80
+          ToPort: 80
+          CidrIp: "0.0.0.0/0"
+      VpcId: !Ref TestJenkinsVPC
+    Metadata:
+      'AWS::CloudFormation::Designer':
+        id: 26dfb23e-9d28-4ea3-8b62-7701150bb238
+
+  PublicRouteTable:
+    Type: AWS::EC2::RouteTable
+    Properties: 
+      VpcId: !Ref TestJenkinsVPC
+
+  DefaultPublicRoute: 
+    Type: AWS::EC2::Route
+    DependsOn: InternetGatewayAttachment
+    Properties: 
+      RouteTableId: !Ref PublicRouteTable
+      DestinationCidrBlock: 0.0.0.0/0
+      GatewayId: !Ref JenkinsInternetGateway
+
+  PublicSubnet1RouteTableAssociation:
+    Type: AWS::EC2::SubnetRouteTableAssociation
+    Properties:
+      RouteTableId: !Ref PublicRouteTable
+      SubnetId: !Ref TestJenkinsSubnet
+
