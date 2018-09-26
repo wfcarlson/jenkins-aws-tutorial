@@ -152,6 +152,7 @@ Resources:
 #          - "RegionMap"
 #          - Ref: "AWS::Region"
 #          - "AMI"
+      IamInstanceProfile: !Ref JenkinsInstanceProfile
       KeyName: 
         Ref: KeyName
       NetworkInterfaces: 
@@ -179,6 +180,11 @@ Resources:
             wget -O /etc/yum.repos.d/jenkins.repo http://pkg.jenkins-ci.org/redhat/jenkins.repo
             rpm --import https://jenkins-ci.org/redhat/jenkins-ci.org.key
             yum install jenkins -y
+
+            yum install git -y
+            yum install python-pip -y
+            pip install awscli --upgrade --user
+            aws configure set region us-east-1
 
             #start jenkins
             service jenkins start
@@ -210,7 +216,14 @@ Resources:
     Metadata:
       'AWS::CloudFormation::Designer':
         id: 204d5695-12c0-4425-9a92-af4930757ac7
-    
+  
+  JenkinsInstanceProfile:
+    Type: 'AWS::IAM::InstanceProfile'
+    Properties:
+      Path: "/"
+      Roles:
+        -  Jenkins  
+
   SSHSecurityGroup:
     Type: 'AWS::EC2::SecurityGroup'
     Properties:
