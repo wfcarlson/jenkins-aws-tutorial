@@ -186,6 +186,12 @@ Resources:
             pip install awscli --upgrade --user
             aws configure set region us-east-1
 
+            yum update -y
+            yum install docker -y
+            service docker start
+            usermod -a -G docker ec2-user
+            ssh-keygen -t rsa -b 4096 -C "walterc@vt.edu"  -f /root/.ssh/id_rsa -q -N ""
+            
             #start jenkins
             service jenkins start
 
